@@ -21,6 +21,7 @@ public class ScoreBoard{
 	
 	public static void main(String[] arg) {		
 
+		//Prueba GIT OK
 		teamsNotPlaying = createTeams();
 		teamsPlaying = new ArrayList<Match>();
 		
