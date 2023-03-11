@@ -21,6 +21,9 @@ public interface Match {
 	Integer getAwayScore();
 	void setAwayScore(Integer score);	
 	
+	Integer getTime();
+	void setTime(Integer time);
+	
 	String getRemarks();
 	void setRemarks(String remarks);
 	
