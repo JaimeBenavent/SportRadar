@@ -11,6 +11,7 @@ public class MatchImp implements interfaces.Match {
 	private Team awayTeam 			= null;
 	private Integer homeScore		= null;
 	private Integer awayScore		= null;
+	private Integer time			= null;
 	private String remarks			= null;
 	private Boolean onPlay			= null;
 	private Date lastUpdate			= null;
@@ -22,6 +23,7 @@ public class MatchImp implements interfaces.Match {
 		this.awayTeam = awayTeam;
 		this.homeScore = homeScore;
 		this.awayScore = awayScore;
+		this.time = 0;
 		this.lastUpdate = new Date();
 	}
 	
@@ -63,6 +65,14 @@ public class MatchImp implements interfaces.Match {
 
 	public void setAwayScore(Integer score) {
 		this.awayScore = score;		
+	}
+	
+	public Integer getTime() {
+		return time;
+	}
+	
+	public void setTime(Integer time) {
+		this.time = time;
 	}
 	
 	public String getRemarks() {
