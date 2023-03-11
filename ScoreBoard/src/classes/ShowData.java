@@ -13,7 +13,7 @@ public class ShowData {
 			for(Match match : matches) {
 				if(match.getLastUpdate() != null) {
 					System.out.println(match.getHomeTeam().getDescription() + " - " + match.getAwayTeam().getDescription() + ": " +
-						match.getHomeScore() + " - " + match.getAwayScore());
+						match.getHomeScore() + " - " + match.getAwayScore() +  " - Time: " + match.getTime());
 				}
 			}
 		}
@@ -21,7 +21,7 @@ public class ShowData {
 	}
 	
 	public static void clearScreen() {  
-		for (int i = 0; i < 50; ++i) 
+		for (int i = 0; i < 1; ++i) 
 			System.out.println();
 	}  
 
