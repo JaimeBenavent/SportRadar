@@ -141,6 +141,10 @@ public class ScoreBoard{
 	public static void timeMatch(List<Match> matches) {
 		for(int i = 0; i < matches.size(); i++) {
 			matches.get(i).setTime(matches.get(i).getTime() + 5);
+			if(matches.get(i).getTime() == 45) {
+				matches.get(i).setRemarks("Halftime");
+			}
+			matches.get(i).setRemarks("");
 			if(matches.get(i).getTime() > 90) {
 				summary.add(new MatchImp(matches.get(i).getHomeTeam(), matches.get(i).getAwayTeam(), matches.get(i).getHomeScore(), matches.get(i).getAwayScore(), matches.get(i).getTime()-5));
 				matches.get(i).setLastUpdate(new Date());
