@@ -139,12 +139,15 @@ public class ScoreBoard{
 	
 	// Method that serves as a match timer and when it reaches the 90th minute the match ends
 	public static void timeMatch(List<Match> matches) {
-		for(int i = 0; i < matches.size(); i++) {
+		for(int i = 0; i < matches.size(); i++) {			
 			matches.get(i).setTime(matches.get(i).getTime() + 5);
 			if(matches.get(i).getTime() == 45) {
 				matches.get(i).setRemarks("Halftime");
+				ShowData.printScoreMatch(matches.get(i));
 			}
-			matches.get(i).setRemarks("");
+			else {
+				matches.get(i).setRemarks("");
+			}			
 			if(matches.get(i).getTime() > 90) {
 				summary.add(new MatchImp(matches.get(i).getHomeTeam(), matches.get(i).getAwayTeam(), matches.get(i).getHomeScore(), matches.get(i).getAwayScore(), matches.get(i).getTime()-5));
 				matches.get(i).setLastUpdate(new Date());
