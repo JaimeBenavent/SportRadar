@@ -4,6 +4,7 @@ import java.util.Date;
 
 import interfaces.Team;
 
+// Class to create the Match object
 public class MatchImp implements interfaces.Match {
 	
 	private String headerScoreBoard	= null;
@@ -17,13 +18,13 @@ public class MatchImp implements interfaces.Match {
 	private Date lastUpdate			= null;
 
 
-	public MatchImp(Team homeTeam, Team awayTeam, Integer homeScore, Integer awayScore) {
+	public MatchImp(Team homeTeam, Team awayTeam, Integer homeScore, Integer awayScore, Integer time) {
 		super();
 		this.homeTeam = homeTeam;
 		this.awayTeam = awayTeam;
 		this.homeScore = homeScore;
 		this.awayScore = awayScore;
-		this.time = 0;
+		this.time = time;
 		this.lastUpdate = new Date();
 	}
 	

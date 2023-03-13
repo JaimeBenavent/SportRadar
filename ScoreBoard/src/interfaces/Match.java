@@ -4,6 +4,7 @@ import java.util.Date;
 
 import interfaces.Team;
 
+// Interface to create the Match object
 public interface Match {	
 
 	String getHeaderScoreBoard();

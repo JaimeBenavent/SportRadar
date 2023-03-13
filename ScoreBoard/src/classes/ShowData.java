@@ -4,24 +4,38 @@ import java.util.List;
 
 import interfaces.Match;
 
+// Class to display the results
 public class ShowData {
 	
+	// Method to display the results of the matches on the screen
 	public static void printScore(List<Match> matches) {
+		String print = "";
 		clearScreen();
 		if(!matches.isEmpty()) {
-			matches.sort((e1,e2)->e1.getLastUpdate().compareTo(e2.getLastUpdate()));
+			matches.sort((e1,e2)->e2.getLastUpdate().compareTo(e1.getLastUpdate()));
 			for(Match match : matches) {
 				if(match.getLastUpdate() != null) {
-					System.out.println(match.getHomeTeam().getDescription() + " - " + match.getAwayTeam().getDescription() + ": " +
-						match.getHomeScore() + " - " + match.getAwayScore() +  " - Time: " + match.getTime());
+					if(match.getRemarks() == null) match.setRemarks("");
+					print = match.getHomeTeam().getDescription() + " - " + match.getAwayTeam().getDescription() + ": " +
+							match.getHomeScore() + " - " + match.getAwayScore() +  " - Time: " + match.getTime() + " " + match.getRemarks();
+					System.out.println(print);
 				}
 			}
 		}
-		
 	}
 	
+	// Method to display the result of a match on the screen
+	public static void printScoreMatch(Match match) {
+		String print = "";		
+		if(match.getRemarks() == null) match.setRemarks("");
+		print = match.getHomeTeam().getDescription() + " - " + match.getAwayTeam().getDescription() + ": " +
+				match.getHomeScore() + " - " + match.getAwayScore() +  " - Time: " + match.getTime() + " " + match.getRemarks();
+		System.out.println(print);
+	}
+	
+	// Method to separate the results with line breaks each time they are displayed on the screen
 	public static void clearScreen() {  
-		for (int i = 0; i < 1; ++i) 
+		for (int i = 0; i < 2; ++i) 
 			System.out.println();
 	}  
 
