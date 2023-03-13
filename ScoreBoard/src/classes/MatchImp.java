@@ -4,7 +4,11 @@ import java.util.Date;
 
 import interfaces.Team;
 
-// Class to create the Match object
+/**
+ *  Class to create the Match object
+ * @author Jaime Benavent Alba
+ *
+ */
 public class MatchImp implements interfaces.Match {
 	
 	private String headerScoreBoard	= null;
@@ -17,7 +21,14 @@ public class MatchImp implements interfaces.Match {
 	private Boolean onPlay			= null;
 	private Date lastUpdate			= null;
 
-
+	/**
+	 * Constructor
+	 * @param Team homeTeam
+	 * @param Team awayTeam
+	 * @param Integer homeScore
+	 * @param Integer awayScore
+	 * @param Integer time
+	 */
 	public MatchImp(Team homeTeam, Team awayTeam, Integer homeScore, Integer awayScore, Integer time) {
 		super();
 		this.homeTeam = homeTeam;

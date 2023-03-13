@@ -3,9 +3,16 @@ package main;
 import classes.*;
 import interfaces.*;
 
+import java.awt.EventQueue;
 import java.util.*;
 
-// Class that executes the results displayed in the scoreboard
+import javax.swing.JFrame;
+
+/**
+ *  Class that executes the results displayed in the scoreboard
+ * @author Jaime Benavent Alba
+ *
+ */
 public class ScoreBoard{
 	
 	private static Integer secondsRandom = 10;
@@ -19,13 +26,9 @@ public class ScoreBoard{
 	private static List<Match> summary 			= null;
 	private static Thread tPrint 				= null;
 	private static Thread tStartingMatches 		= null;
-	
+
 	public static void main(String[] arg) {
 		
-		//App app = new App();
-		//app.setVisible(true);
-		
-
 		teamsNotPlaying = createTeams();
 		teamsPlaying = new ArrayList<Match>();
 		summary = new ArrayList<Match>();
@@ -40,7 +43,10 @@ public class ScoreBoard{
 		System.out.println(header);
 	}
 	
-	// Method to create a list of teams added by hand
+	/**
+	 *  Method to create a list of teams added by hand
+	 * @return List<Team>
+	 */
 	public static List<Team> createTeams() {
 		
 		List<Team> teams = new ArrayList<Team>();
@@ -58,7 +64,11 @@ public class ScoreBoard{
 		return teams;
 	}
 	
-	// Method to create the pairing of matches initialized to zero
+	/**
+	 *  Method to create the pairing of matches initialized to zero
+	 * @param List<Team> teams
+	 * @return Match
+	 */
 	public static Match createMatch(List<Team> teams) {
 		Match match = null;
 		if(!teams.isEmpty()) {
@@ -75,7 +85,10 @@ public class ScoreBoard{
 		return match;
 	}
 	
-	// Method that goes through the list of matches and randomly searches for a team to add a goal to it
+	/**
+	 *  Method that goes through the list of matches and randomly searches for a team to add a goal to it
+	 * @param List<Match>matches
+	 */
 	public static void goalMatch(List<Match> matches) {
 		if(!matches.isEmpty()) {
 			Random ran = new Random();
@@ -121,7 +134,11 @@ public class ScoreBoard{
 		}
 	}
 	
-	// Method that annuls a goal in the event that it has gone up on the scoreboard and is not valid
+	/**
+	 *  Method that annuls a goal in the event that it has gone up on the scoreboard and is not valid
+	 * @param Match match
+	 * @param Team team
+	 */
 	public static void cancelGoalMatch(Match match, Team team) {
 		if(match != null) {
 			if(match.getHomeTeam().getDescription().equals(team.getDescription())) {
@@ -137,7 +154,10 @@ public class ScoreBoard{
 		}
 	}
 	
-	// Method that serves as a match timer and when it reaches the 90th minute the match ends
+	/**
+	 *  Method that serves as a match timer and when it reaches the 90th minute the match ends
+	 * @param List<match> matches
+	 */
 	public static void timeMatch(List<Match> matches) {
 		for(int i = 0; i < matches.size(); i++) {			
 			matches.get(i).setTime(matches.get(i).getTime() + 5);
@@ -156,7 +176,10 @@ public class ScoreBoard{
 		}
 	}
 	
-	// Thread to print the list of teams on the screen, start the match time and add the goals to the teams of each match, and when they finish it adds them to a summary list.
+	/**
+	 *  Thread to print the list of teams on the screen, start the match time and add the goals to the teams of each match, and when they finish it adds them to a summary list.
+	 * @return Thread
+	 */
 	public static Thread printMatches() {
 		Thread t = new Thread() {
 			public void run() {
@@ -183,7 +206,10 @@ public class ScoreBoard{
 		return t;
 	}
 	
-	// Thread in charge of initiating random matches from time to time and adding a goal if the match has already started
+	/**
+	 *  Thread in charge of initiating random matches from time to time and adding a goal if the match has already started
+	 * @return Thread
+	 */
 	public static Thread startMatches() {
 		Thread t = new Thread() {
 			public void run() {
@@ -211,7 +237,10 @@ public class ScoreBoard{
 		return t;
 	}
 	
-	// Thread in charge of stopping the thread that initializes the matches when there are none left to start
+	/**
+	 *  Thread in charge of stopping the thread that initializes the matches when there are none left to start
+	 * @return Thread
+	 */
 	public static Thread stopStartingMatches() {
 		Thread t = new Thread() {
 			public void run() {
@@ -229,7 +258,10 @@ public class ScoreBoard{
 		return t;
 	}
 	
-	// Thread in charge of for all matches when they are over
+	/**
+	 *  Thread in charge of for all matches when they are over
+	 * @return Thread
+	 */
 	public static Thread stopMatches() {
 		Thread t = new Thread() {
 			public void run() {
