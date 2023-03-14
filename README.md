@@ -1,18 +1,30 @@
 # SportRadar
-The program consists of a sports scoreboard that shows the results of various world cup matches.
+***DESCRIPTION
+The application shows a sports scoreboard with some results of soccer world cup matches
 
-It is based on two objects (Team and Match) to be able to show all the necessary information of the sports scoreboard.
+Displays in a main scoreboard the last action occurred in each of the matches in play, using functions such as goal, VAR, disallowed goal, half-time and end of match
+Below the main scoreboard, a list of the matches in play is displayed, which are kept on screen until the end of the match
+At the end of all matches, this list will show a summary of the results of the matches played
 
-In order to test them I have created the following test:
 
-Create a list of soccer teams manually.
+***HOW IT WORKS
+1. Creates a frame object where the scoreboard is displayed.
+2. A list of matches pending to start is created containing all the home and aways teams
+3. An empty list of matches in play is created
+4. An empty list of match summaries is created
+5. A thread is created to update the actions of each match and display them on the screen
+6. A thread is created to start the matches by moving the matches from the list of pending matches to the list of matches in play
+7. The thread to start the matches is started 
+8. The thread to display the restuls is started
+9. The thread to check goal matches is started
 
-Create a list of matches by going through the list of teams randomly and initializing each match with the result from zero to zero.
 
-Once I have initialized a match, a stopwatch is initialized and the teams can now score goals, which are added from time to time marked by a random variable and in a random team from the list of matches.
 
-When there is a goal and a condition based on a combination of numbers that are randomly generated is met, VAR is called and the goal can be annulled if it meets the final condition.
 
-When the timer reaches 90, (which for this example increases by 5 by 5), the match ends and goes to a new summary list, and disappears from the sports scoreboard.
-
-When all the matches are finished, their result is shown in the summary list and the score remains empty and the program ends.
+***TEST
+A soccer teams list is created manually
+A matches list is created based on a random selection from the soccer teams list and every match starts with 0-0 score
+Once a match is started, every team can now score goals, which are managed by a random time variable and a random team from the matches list
+Every time a team scores a goal, it is calculated a 20% of VAR possibility. If the VAR is called, then it has a fifty percent of possibility to be a valid goal. This is based on a random function with configurable variables to call VAR action and Valid goal action
+When the timer reaches 90', (in this test increases by 5 second), the match ends and is added to the summary list, and is removed from the scoreboard
+When all the matches are finished, the result is shown in the summary list and the application ends
