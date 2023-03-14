@@ -35,10 +35,9 @@ public class ScoreBoard{
 		
 	    Thread tPrint = printMatches();
 		tStartingMatches = startMatches();
-		stopStartingMatches();
+		
 		tStartingMatches.start();
 		tPrint.start();
-		stopMatches();
 		
 		System.out.println(header);
 	}
@@ -79,7 +78,7 @@ public class ScoreBoard{
 			n = ran.nextInt(teams.size());
 			Team awayTeam = teams.get(n);
 			teams.remove(n);
-			match = new MatchImp(homeTeam, awayTeam, 0 , 0, 0);
+			match = new MatchImp(homeTeam, awayTeam, 0 , 0, 0, " - Min: 0");
 			match.setLastUpdate(new Date());
 		}
 		return match;
@@ -101,36 +100,38 @@ public class ScoreBoard{
 					match.setHomeScore(match.getHomeScore() + 1);
 					match.setLastUpdate(new Date());
 					if(k >= 0 && k < 10) {
-						match.setRemarks("VAR");
+						match.setRemarks(" - Min: " + match.getTime() + " - VAR");
+						ShowData.printScoreMatch(match);
 						if(k <= 5) {
-							match.setRemarks("Disallowed Goal");
+							match.setRemarks(" - Min: " + match.getTime() + " - Cancel Goal");
+							ShowData.printScoreMatch(match);
 							cancelGoalMatch(match, match.getHomeTeam());
 						}
 						else {
-							match.setRemarks("Goal");
+							match.setRemarks(" - Min: " + match.getTime() + " - Goal");
+							ShowData.printScoreMatch(match);
 						}
-						
 					}
 				}
 				else {
 					match.setAwayScore(match.getAwayScore() + 1);
 					match.setLastUpdate(new Date());
 					if(k >= 40) {
-						match.setRemarks("VAR");
+						match.setRemarks(" - Min: " + match.getTime() + " - VAR");
 						ShowData.printScoreMatch(match);
 						if(k >= 45) {
-							match.setRemarks("Disallowed Goal");
+							match.setRemarks(" - Min: " + match.getTime() + " - Cancel Goal");
 							ShowData.printScoreMatch(match);
 							cancelGoalMatch(match, match.getAwayTeam());
 						}
 						else {
-							match.setRemarks("Goal");
+							match.setRemarks(" - Min: " + match.getTime() + " - Goal");
 							ShowData.printScoreMatch(match);
 						}
 					}
 				}
 			}
-			match.setRemarks("");
+			match.setRemarks(" - Min: " + match.getTime());
 		}
 	}
 	
@@ -144,12 +145,12 @@ public class ScoreBoard{
 			if(match.getHomeTeam().getDescription().equals(team.getDescription())) {
 				match.setHomeScore(match.getHomeScore() - 1);
 				match.setLastUpdate(new Date());
-				match.setRemarks("");
+				match.setRemarks(" - Min: " + match.getTime());
 			}
 			else {
 				match.setAwayScore(match.getAwayScore() - 1);
 				match.setLastUpdate(new Date());
-				match.setRemarks("");
+				match.setRemarks(" - Min: " + match.getTime());
 			}
 		}
 	}
@@ -162,14 +163,15 @@ public class ScoreBoard{
 		for(int i = 0; i < matches.size(); i++) {			
 			matches.get(i).setTime(matches.get(i).getTime() + 5);
 			if(matches.get(i).getTime() == 45) {
-				matches.get(i).setRemarks("Halftime");
+				matches.get(i).setRemarks(" - Min: " + matches.get(i).getTime() + " - Halftime");
 				ShowData.printScoreMatch(matches.get(i));
 			}
 			else {
-				matches.get(i).setRemarks("");
+				matches.get(i).setRemarks(" Min: " + matches.get(i).getTime());
 			}			
-			if(matches.get(i).getTime() > 90) {
-				summary.add(new MatchImp(matches.get(i).getHomeTeam(), matches.get(i).getAwayTeam(), matches.get(i).getHomeScore(), matches.get(i).getAwayScore(), matches.get(i).getTime()-5));
+			if(matches.get(i).getTime() == 90) {
+				matches.get(i).setRemarks(" - Min: " + matches.get(i).getTime() + " - Finish");
+				summary.add(new MatchImp(matches.get(i).getHomeTeam(), matches.get(i).getAwayTeam(), matches.get(i).getHomeScore(), matches.get(i).getAwayScore(), matches.get(i).getTime(), matches.get(i).getRemarks()));
 				matches.get(i).setLastUpdate(new Date());
 				teamsPlaying.remove(i);
 			}

@@ -22,9 +22,9 @@ public class ShowData {
 			matches.sort((e1,e2)->e2.getLastUpdate().compareTo(e1.getLastUpdate()));
 			for(Match match : matches) {
 				if(match.getLastUpdate() != null) {
-					if(match.getRemarks() == null) match.setRemarks("");
+					if(match.getRemarks() == null) match.setRemarks(" - Min: " + match.getTime());
 					print = match.getHomeTeam().getDescription() + " - " + match.getAwayTeam().getDescription() + ": " +
-							match.getHomeScore() + " - " + match.getAwayScore() +  " - Time: " + match.getTime() + " " + match.getRemarks();
+							match.getHomeScore() + " - " + match.getAwayScore() + match.getRemarks();
 					System.out.println(print);
 				}
 			}
@@ -38,9 +38,9 @@ public class ShowData {
 	 */
 	public static String printScoreMatch(Match match) {
 		String print = "";		
-		if(match.getRemarks() == null) match.setRemarks("");
+		if(match.getRemarks() == null) match.setRemarks(" - Min: " + match.getTime());
 		print = match.getHomeTeam().getDescription() + " - " + match.getAwayTeam().getDescription() + ": " +
-				match.getHomeScore() + " - " + match.getAwayScore() +  " - Time: " + match.getTime() + " " + match.getRemarks();
+				match.getHomeScore() + " - " + match.getAwayScore() + match.getRemarks();
 		System.out.println(print);
 		return print;
 	}

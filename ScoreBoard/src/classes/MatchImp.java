@@ -29,13 +29,14 @@ public class MatchImp implements interfaces.Match {
 	 * @param Integer awayScore
 	 * @param Integer time
 	 */
-	public MatchImp(Team homeTeam, Team awayTeam, Integer homeScore, Integer awayScore, Integer time) {
+	public MatchImp(Team homeTeam, Team awayTeam, Integer homeScore, Integer awayScore, Integer time, String remarks) {
 		super();
 		this.homeTeam = homeTeam;
 		this.awayTeam = awayTeam;
 		this.homeScore = homeScore;
 		this.awayScore = awayScore;
 		this.time = time;
+		this.remarks = remarks;
 		this.lastUpdate = new Date();
 	}
 	

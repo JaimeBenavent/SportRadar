@@ -38,8 +38,9 @@ public class App {
 	private static JLabel lblRemarks 	= null;
 	private static JTextArea textArea 	= null;
 	
-	private static Integer secondsPrint = 10;
-	private static Integer secondsGoal = 30;
+	private static Integer secondsMatch = 10;
+	private static Integer secondsGoal = 10;
+	private static Integer secondsPrint = 5;
 	private static Integer secondsVar = 50;
 	
 	private static String title = "Football World Cup";
@@ -47,8 +48,6 @@ public class App {
 	private static List<Team> teamsNotPlaying 	= null;
 	private static List<Match> teamsPlaying 	= null;
 	private static List<Match> summary 			= null;
-	private static Thread tPrint 				= null;
-	private static Thread tStartingMatches 		= null;
 
 	/**
 	 * Launch the application.
@@ -65,14 +64,12 @@ public class App {
 					summary = new ArrayList<Match>();
 					
 				    Thread tPrint = printMatches();
-					tStartingMatches = startMatches();
-					
-					stopStartingMatches();	
+				    Thread tStartingMatches = startMatches();
+				    //Thread tGoal = goalMatches();
 					
 					tStartingMatches.start();
 					tPrint.start();
-					
-					stopMatches();
+					//tGoal.start();
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -94,7 +91,7 @@ public class App {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle(title);
-		frame.setBounds(0, 0, 592, 550);
+		frame.setBounds(0, 0, 592, 512);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
@@ -107,13 +104,15 @@ public class App {
 		textArea.setRows(5);
 		textArea.setEditable(false);
 		textArea.setFont(new Font("Arial", Font.PLAIN, 20));
-		textArea.setBounds(48, 319, 469, 166);
+		textArea.setBounds(48, 319, 469, 153);
+		textArea.setAlignmentX(SwingConstants.CENTER);
+		textArea.setAlignmentY(SwingConstants.CENTER);
 		layered.add(textArea);
 		
 		lblRemarks = new JLabel("");
 		layered.setLayer(lblRemarks, 0);
 		lblRemarks.setForeground(Color.WHITE);
-		lblRemarks.setFont(new Font("Arial Black", Font.PLAIN, 40));
+		lblRemarks.setFont(new Font("Arial Black", Font.PLAIN, 30));
 		lblRemarks.setBackground(Color.BLUE);
 		lblRemarks.setHorizontalAlignment(SwingConstants.CENTER);
 		lblRemarks.setBounds(48, 249, 469, 49);
@@ -204,7 +203,7 @@ public class App {
 			Team awayTeam = teams.get(n);
 			teams.remove(n);
 			
-			match = new MatchImp(homeTeam, awayTeam, 0 , 0, 0);
+			match = new MatchImp(homeTeam, awayTeam, 0 , 0, 0, " Min: 0");
 			printScoreMatch(match);
 			
 			match.setLastUpdate(new Date());
@@ -226,25 +225,23 @@ public class App {
 			int k = ran.nextInt(secondsVar);
 			
 			Match match = matches.get(i);
-			match.setRemarks("Min: " + match.getTime());
 			
 			if(match.getTime() > 0) {
 				if(j == 1) {				
 					match.setHomeScore(match.getHomeScore() + 1);
-					printScoreMatch(match);
 					match.setLastUpdate(new Date());
 					
 					if(k >= 0 && k < 10) {
-						match.setRemarks("VAR");
+						match.setRemarks("Min: " + match.getTime() + " - VAR");
 						printScoreMatch(match);
 						
 						if(k <= 5) {
-							match.setRemarks("VAR - Cancel Goal");
+							match.setRemarks("Min: " + match.getTime() + " - VAR: Cancel Goal");
 							printScoreMatch(match);
 							cancelGoalMatch(match, match.getHomeTeam());
 						}
 						else {
-							match.setRemarks("VAR - Goal");
+							match.setRemarks("Min: " + match.getTime() + " - VAR: Goal");
 							printScoreMatch(match);
 						}
 						
@@ -252,25 +249,25 @@ public class App {
 				}
 				else {
 					match.setAwayScore(match.getAwayScore() + 1);
-					printScoreMatch(match);
 					match.setLastUpdate(new Date());
 					
-					if(k >= 40) {
-						match.setRemarks("VAR");
+					if(k >= 40 && k < 50) {
+						match.setRemarks("Min: " + match.getTime() + " - VAR");
 						printScoreMatch(match);
 						
 						if(k >= 45) {
-							match.setRemarks("VAR - Cancel Goal");
+							match.setRemarks("Min: " + match.getTime() + " - VAR: Cancel Goal");
 							printScoreMatch(match);
 							cancelGoalMatch(match, match.getAwayTeam());
 						}
 						else {
-							match.setRemarks("VAR - Goal");
+							match.setRemarks("Min: " + match.getTime() + " - VAR: Goal");
 							printScoreMatch(match);
 						}
 					}
 				}
 			}
+			match.setRemarks("Min: " + match.getTime());
 		}
 	}
 	
@@ -282,17 +279,16 @@ public class App {
 	public static void cancelGoalMatch(Match match, Team team) {
 		
 		if(match != null) {
-			match.setRemarks("Min: " + match.getTime());
 			
 			if(match.getHomeTeam().getDescription().equals(team.getDescription())) {
 				match.setHomeScore(match.getHomeScore() - 1);
 				match.setLastUpdate(new Date());
-				printScoreMatch(match);
+				match.setRemarks("Min: " + match.getTime());
 			}
 			else {
 				match.setAwayScore(match.getAwayScore() - 1);
 				match.setLastUpdate(new Date());
-				printScoreMatch(match);
+				match.setRemarks("Min: " + match.getTime());
 			}
 		}
 	}
@@ -308,13 +304,13 @@ public class App {
 			matches.get(i).setRemarks("Min: " + matches.get(i).getTime());
 			
 			if(matches.get(i).getTime() == 45) {
-				matches.get(i).setRemarks("Halftime");
+				matches.get(i).setRemarks("Min: " + matches.get(i).getTime() + " - Halftime");
 				printScoreMatch(matches.get(i));
 			}
 			
 			if(matches.get(i).getTime() == 90) {
-				matches.get(i).setRemarks("Finish");
-				summary.add(new MatchImp(matches.get(i).getHomeTeam(), matches.get(i).getAwayTeam(), matches.get(i).getHomeScore(), matches.get(i).getAwayScore(), matches.get(i).getTime()));
+				matches.get(i).setRemarks("Min: " + matches.get(i).getTime() + " - Finish");
+				summary.add(new MatchImp(matches.get(i).getHomeTeam(), matches.get(i).getAwayTeam(), matches.get(i).getHomeScore(), matches.get(i).getAwayScore(), matches.get(i).getTime(), matches.get(i).getRemarks()));
 				matches.get(i).setLastUpdate(new Date());
 				teamsPlaying.remove(i);
 			}
@@ -362,11 +358,10 @@ public class App {
 					Match matchStarting = createMatch(teamsNotPlaying);
 					while(matchStarting!=null)
 					{
-						if(matchStarting != null){
-							teamsPlaying.add(matchStarting);
-						}
+						teamsPlaying.add(matchStarting);
+						
 						Random ran = new Random();
-						int n = ran.nextInt(secondsPrint);
+						int n = ran.nextInt(secondsMatch);
 						Thread.sleep(1000*n);						
 						matchStarting = createMatch(teamsNotPlaying);
 						
@@ -382,78 +377,114 @@ public class App {
 		};
 		return t;
 	}
+	/**
+	 * Thread in charge of adding a goal every certain random time to a team in a game in progress
+	 * @return Thread
+	 */
+//	public static Thread startGoal() {
+//		Thread t = new Thread() {
+//			public void run() {
+//				try {
+//					Match matchStarting = createMatch(teamsNotPlaying);
+//					while(matchStarting!=null)
+//					{
+//						teamsPlaying.add(matchStarting);
+//						
+//						Random ran = new Random();
+//						int n = ran.nextInt(secondsMatch);
+//						Thread.sleep(1000*n);						
+//						matchStarting = createMatch(teamsNotPlaying);
+//						
+//						int m = ran.nextInt(secondsGoal);
+//						Thread.sleep(1000*m);
+//						goalMatch(teamsPlaying);
+//					}
+//				}
+//				catch (InterruptedException e){
+//					System.out.println("Error in startMatches: " + e.getMessage());
+//				}
+//			}
+//		};
+//		return t;
+//	}
 	
 	/**
 	 *  Thread in charge of stopping the thread that initializes the matches when there are none left to start
 	 * @return Thread
 	 */
-	public static Thread stopStartingMatches() {
-		Thread t = new Thread() {
-			public void run() {
-				try {
-					if(teamsNotPlaying.isEmpty()) {
-						tStartingMatches.stop();
-					}
-					Thread.sleep(100);
-				}
-				catch (InterruptedException e){
-					System.out.println("Error in stopStartingMatches: " + e.getMessage());
-				}
-			}
-		};
-		return t;
-	}
+//	public static Thread stopStartingMatches() {
+//		Thread t = new Thread() {
+//			public void run() {
+//				try {
+//					if(teamsNotPlaying.isEmpty()) {
+//						tStartingMatches.stop();
+//					}
+//					Thread.sleep(100*secondsStopMatches);
+//				}
+//				catch (InterruptedException e){
+//					System.out.println("Error in stopStartingMatches: " + e.getMessage());
+//				}
+//			}
+//		};
+//		return t;
+//	}
 	
 	/**
 	 *  Thread in charge of for all matches when they are over
 	 * @return Thread
 	 */
-	public static Thread stopMatches() {
-		Thread t = new Thread() {
-			public void run() {
-				try {
-					if(teamsPlaying.isEmpty()) {
-						tPrint.stop();
-					}
-					Thread.sleep(100);
-				}
-				catch (InterruptedException e){
-					System.out.println("Error in stopMatches: " + e.getMessage());
-				}
-			}
-		};
-		return t;
-	}
+//	public static Thread stopMatches() {
+//		Thread t = new Thread() {
+//			public void run() {
+//				try {
+//					if(teamsPlaying.isEmpty()) {
+//						tPrint.stop();
+//					}
+//					Thread.sleep(100*secondsStopMatches);
+//				}
+//				catch (InterruptedException e){
+//					System.out.println("Error in stopMatches: " + e.getMessage());
+//				}
+//			}
+//		};
+//		return t;
+//	}
 	
 	public static void printScore(List<Match> matches) {
 		String print = "";
 		String printTextArea = "";
-		//clearScreen();
+		clearScreen();
 		if(!matches.isEmpty()) {
 			matches.sort((e1,e2)->e1.getLastUpdate().compareTo(e2.getLastUpdate()));
 			for(Match match : matches) {
 				if(match.getLastUpdate() != null) {
 					if(match.getRemarks() == null) match.setRemarks("Min: " + match.getTime());
-					print = match.getHomeTeam().getDescription() + " - " + match.getAwayTeam().getDescription() + ": " +
-							match.getHomeScore() + " - " + match.getAwayScore() +  " -  " + "Min: " + match.getTime();
+					print = print + match.getHomeTeam().getDescription() + " - " + match.getAwayTeam().getDescription() + ": " +
+							match.getHomeScore() + " - " + match.getAwayScore() +  " > " + match.getRemarks() + "\n";
 					
 					lblHomeTeam.setText(match.getHomeTeam().getDescription());
 					lblAwayTeam.setText(match.getAwayTeam().getDescription());
 					lblHomeScore.setText(match.getHomeScore().toString());
 					lblAwayScore.setText(match.getAwayScore().toString());
-					if(lblRemarks.getText().equals("VAR") ||  lblRemarks.getText().equals("VAR - Goal") || lblRemarks.getText().equals("VAR - Cancel Goal") || lblRemarks.getText().equals("Halftime") || lblRemarks.getText().equals("Finish")) {
-						lblRemarks.setText(match.getRemarks());
-					}
-					else {
-						lblRemarks.setText("Min: " + match.getTime());
-					}
+					lblRemarks.setText(match.getRemarks());
+					textArea.setText(print);
 					
-					System.out.println(print);
+					System.out.println(match.getHomeTeam().getDescription() + " - " + match.getAwayTeam().getDescription() + ": " +
+							match.getHomeScore() + " - " + match.getAwayScore() +  " > " + match.getRemarks());
 					
-					printTextArea = printTextArea + "\n" + match.getHomeTeam().getDescription() + ": " + match.getHomeScore() + " - " +
-							match.getAwayTeam().getDescription() + ": " + match.getAwayScore();
+					printTextArea = printTextArea + match.getHomeTeam().getDescription() + "  " + match.getHomeScore() + " - " +
+							match.getAwayTeam().getDescription() + "  " + match.getAwayScore() + "\n";
 					if(teamsPlaying.isEmpty()) {
 						textArea.setText(printTextArea);
+						lblHomeTeam.setText("");
+						lblHomeTeam.setOpaque(false);
+						lblAwayTeam.setText("");
+						lblAwayTeam.setOpaque(false);
+						lblHomeScore.setText("");
+						lblHomeScore.setOpaque(false);
+						lblAwayScore.setText("");
+						lblAwayScore.setOpaque(false);
+						lblRemarks.setText("Finish");
 					}
 				}
 			}
@@ -469,18 +500,13 @@ public class App {
 		String print = "";		
 		if(match.getRemarks() == null) match.setRemarks("");
 		print = match.getHomeTeam().getDescription() + " - " + match.getAwayTeam().getDescription() + ": " +
-				match.getHomeScore() + " - " + match.getAwayScore() +  " - " + "Min: " + match.getTime();
+				match.getHomeScore() + " - " + match.getAwayScore() +  " > " + match.getRemarks();
 		
 		lblHomeTeam.setText(match.getHomeTeam().getDescription());
 		lblAwayTeam.setText(match.getAwayTeam().getDescription());
 		lblHomeScore.setText(match.getHomeScore().toString());
 		lblAwayScore.setText(match.getAwayScore().toString());
-		if(lblRemarks.getText().equals("VAR") ||  lblRemarks.getText().equals("VAR - Goal") || lblRemarks.getText().equals("VAR - Cancel Goal") || lblRemarks.getText().equals("Halftime") || lblRemarks.getText().equals("Finish")) {
-			lblRemarks.setText(match.getRemarks());
-		}
-		else {
-			lblRemarks.setText("Min: " + match.getTime());
-		}
+		lblRemarks.setText(match.getRemarks());
 		
 		System.out.println(print);
 	}
